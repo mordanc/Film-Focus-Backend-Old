@@ -20,6 +20,7 @@ db.on('open', () => {
 
 
 io.on('connection', (socket) => {
+    console.log('Client connected');
     socket.on('saveToDb', ({ id, video_id_array }) => {
         console.log("Requested: " + id + ', Videos: ' + video_id_array);
 
