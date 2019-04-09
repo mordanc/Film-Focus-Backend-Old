@@ -21,10 +21,9 @@ db.on('open', () => {
 
 io.on('connection', (socket) => {
     socket.on('saveToDb', ({ id, video_id_array }) => {
-        console.log("Requested: " + id + ', Videos: ' + video_id_array);
+        console.log('Requested: ' + id + ', Videos: ' + video_id_array);
 
         MovieInfo.findOne({ movie_id: id }, (err, result) => {
-
             if (err) return console.error(err);
             else {
                 try {
@@ -35,8 +34,10 @@ io.on('connection', (socket) => {
                     var movie = new MovieInfo({ movie_id: id, video_id_array: video_id_array });
                     movie.save((err, res) => {
                         if (err) return console.error(err);
-                        console.log('Saved record' + id + ' to database');
-                        socket.emit('Response', res);
+                        else {
+                            console.log('Saved record' + id + ' to database');
+                            socket.emit('Response', res);
+                        }
                     });
                 }
             }
@@ -47,10 +48,10 @@ io.on('connection', (socket) => {
         MovieInfo.findOne({ movie_id: id }, function (err, result) {
             console.log('Looking for ' + id)
             if (err) return console.log(err);
-
-            console.log("Found results " + result);
-            return result;
-
-        })
-    })
-})
+            else {
+                console.log('Found results ' + result);
+                return result;
+            }
+        });
+    });
+});
