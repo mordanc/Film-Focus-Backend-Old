@@ -1,6 +1,5 @@
 import { DB_URL } from './constants';
 import { connect, connection } from 'mongoose';
-import bodyParser from 'body-parser';
 import MovieInfo, { findOne } from './schema';
 
 const port = 3001;
