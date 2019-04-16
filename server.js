@@ -1,16 +1,16 @@
-var constants = require('./constants');
-var mongoose = require('mongoose');
-var bodyParser = require('body-parser');
-var MovieInfo = require('./schema');
+import { DB_URL } from './constants';
+import { connect, connection } from 'mongoose';
+import bodyParser from 'body-parser';
+import MovieInfo, { findOne } from './schema';
 
 const port = 3001;
 const server = require('http').createServer().listen(port);
 const io = require('socket.io')(server);
 
 // connect to database
-mongoose.connect(constants.DATABASEURL, { useNewUrlParser: true });
+connect(DB_URL, { useNewUrlParser: true });
 
-var db = mongoose.connection;
+var db = connection;
 
 db.on('error', console.error.bind(console, 'connection error'));
 db.on('open', () => {
@@ -23,7 +23,7 @@ io.on('connection', (socket) => {
     socket.on('saveToDb', ({ id, video_id_array }) => {
         console.log('Requested: ' + id + ', Videos: ' + video_id_array);
 
-        MovieInfo.findOne({ movie_id: id }, (err, result) => {
+        findOne({ movie_id: id }, (err, result) => {
             if (err) return console.error(err);
             else {
                 try {
@@ -45,7 +45,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('requestVideos', id => {
-        MovieInfo.findOne({ movie_id: id }, function (err, result) {
+        findOne({ movie_id: id }, function (err, result) {
             console.log('Looking for ' + id)
             if (err) return console.log(err);
             else {
